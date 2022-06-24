@@ -42,8 +42,12 @@ public void OnPluginStart()
         g_SteamID[i][0] = '\0';
 }
 
-public void OnClientAuthorized(int client)
+public void OnClientPutInServer(int client)
 {
+    if (!client) {
+        return;
+    }
+
     g_Clients[client] = GetClientUserId(client);
     GetClientAuthId(client, AuthId_Steam2, g_SteamID[client], sizeof(g_SteamID[]));
 }
@@ -82,6 +86,9 @@ public Action Event_Disconnect(Event event, const char[] name, bool dontBroadcas
 
     for(int i = 0; i < 10; i++) {
         if (StrContains(buffer_real, ignoredMessages[i]) == 0) {
+            client_id = 0;
+            g_SteamID[client_id][0] = '\0';
+
             return Plugin_Continue;
         }
     }
