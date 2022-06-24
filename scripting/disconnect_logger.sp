@@ -27,7 +27,7 @@ public Plugin myinfo = {
     name        = "Disconnect Message Logger",
     author      = "fizi",
     description = "Logs certain disconnect messages.",
-    version     = "0.0.1",
+    version     = "0.1.0",
     url         = "https://github.com/fizioterapia"
 };
 
@@ -59,7 +59,6 @@ public Action Event_Disconnect(Event event, const char[] name, bool dontBroadcas
     
     char disconnectedMessage[256];
     char player_name[256];
-    char buffer_real[256];
 
     int client_userid;
     int client_id;
@@ -75,17 +74,9 @@ public Action Event_Disconnect(Event event, const char[] name, bool dontBroadcas
 
     event.GetString("name", player_name, 256);
     event.GetString("reason", disconnectedMessage, 256);
-    strcopy(buffer_real, 256, disconnectedMessage);
-
-    for(int i = 0; i < 256; i++) {
-        if (buffer_real[i] == '\0') {
-            break;
-        }
-        buffer_real[i] = CharToLower(buffer_real[i]);
-    }
 
     for(int i = 0; i < 10; i++) {
-        if (StrContains(buffer_real, ignoredMessages[i]) == 0) {
+        if (StrContains(disconnectedMessage, ignoredMessages[i], false) != -1) {
             client_id = 0;
             g_SteamID[client_id][0] = '\0';
 
