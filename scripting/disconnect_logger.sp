@@ -40,9 +40,6 @@ public void OnPluginStart()
 
     for(int i = 0; i < 25; i++)
         g_SteamID[i][0] = '\0';
-
-    for(int i = 0; i < 25; i++)
-        g_Clients[i] = -1;
 }
 
 public void OnClientAuthorized(int client)
@@ -64,7 +61,7 @@ public Action Event_Disconnect(Event event, const char[] name, bool dontBroadcas
     int client_id;
 
     client_userid = event.GetInt("userid");
-    for(int i = 0; i < 25; i++) {
+    for(int i = 1; i < 25; i++) {
         if (g_Clients[i] == client_userid) {
             client_id = i;
             g_Clients[i] = -1;
@@ -89,10 +86,10 @@ public Action Event_Disconnect(Event event, const char[] name, bool dontBroadcas
         }
     }
 
-    if(client_id >= 0)
+    if(client_id > 0)
         LogToFile(g_FilePath, "%s<%s> disconnected with a reason: %s", player_name, g_SteamID[client_id], disconnectedMessage);
 
-    client_id = -1;
+    client_id = 0;
     g_SteamID[client_id][0] = '\0';
 
     return Plugin_Continue;
