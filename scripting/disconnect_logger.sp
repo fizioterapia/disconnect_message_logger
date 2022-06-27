@@ -143,7 +143,7 @@ public Action Event_Disconnect(Event event, const char[] name, bool dontBroadcas
     if(g_cvBan.BoolValue && cheatMessage)
     {
         LogToFile(g_cFilePath, "%s<%s> | IP: %s - banned due to a reason: %s", playerName, g_pPlayers[clientId].steamId2, g_pPlayers[clientId].ip, disconnectedMessage);
-        CPrintToChatAll("{RED} > BOOM {default} | %s<%s> just has been exterminated.", playerName, g_pPlayers[clientId].steamId2);
+        CPrintToChatAll("{RED} > BOOM{default} :: %s<%s> just has been exterminated.", playerName, g_pPlayers[clientId].steamId2);
 			
         if (g_bSourceBans)
             ServerCommand("sm_addban 0 %s Cheater detected, entry rejected.", g_pPlayers[clientId].steamId2);
