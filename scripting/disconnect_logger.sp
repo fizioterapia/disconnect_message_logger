@@ -84,6 +84,7 @@ public void OnLibraryRemoved(const char []name)
         g_bSourceBans = false;
 }
 
+// Connect
 public void OnClientPutInServer(int client)
 {
     if (!client || !IsValidClient(client)) {
@@ -94,7 +95,6 @@ public void OnClientPutInServer(int client)
     GetClientAuthId(client, AuthId_Steam2, g_pPlayers[client].steamId2, 64);
     GetClientIP(client, g_pPlayers[client].ip, 64);
 }
-
 
 // Disconnect
 public int ContainsMessage(char[] source, char[] message)
