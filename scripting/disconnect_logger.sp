@@ -25,6 +25,8 @@ Player g_pPlayers[MAXPLAYERS+1];
 ConVar g_cvLog;
 ConVar g_cvBan;
 
+bool g_bSourceBans = false;
+
 char g_cFilePath[PLATFORM_MAX_PATH];
 char g_cIgnoredMessages[11][256] = {
     "timed out",
@@ -63,6 +65,23 @@ public void OnPluginStart()
     HookEvent("player_disconnect", Event_Disconnect);
 
     AutoExecConfig(true, "disconnect_logger");
+}
+
+public void OnAllPluginsLoaded()
+{
+    g_bSourceBans = LibraryExists("sourcebans++");
+}
+
+public void OnLibraryAdded(const char []name)
+{
+    if (StrEqual(name, "sourcebans++"))
+        g_bSourceBans = true;
+}
+
+public void OnLibraryRemoved(const char []name)
+{
+    if (StrEqual(name, "sourcebans++"))
+        g_bSourceBans = false;
 }
 
 public void OnClientPutInServer(int client)
@@ -126,7 +145,9 @@ public Action Event_Disconnect(Event event, const char[] name, bool dontBroadcas
         LogToFile(g_cFilePath, "%s<%s> | IP: %s - banned due to a reason: %s", playerName, g_pPlayers[clientId].steamId2, g_pPlayers[clientId].ip, disconnectedMessage);
         CPrintToChatAll("{RED} > BOOM {default} | %s<%s> just has been exterminated.", playerName, g_pPlayers[clientId].steamId2);
 			
-        ServerCommand("sm_addban 0 %s Cheater detected, entry rejected.", g_pPlayers[clientId].steamId2);
+        if (g_bSourceBans)
+            ServerCommand("sm_addban 0 %s Cheater detected, entry rejected.", g_pPlayers[clientId].steamId2);
+
         ServerCommand("addip 1440 %s", g_pPlayers[clientId].ip);
         ServerCommand("writeip");
     }
